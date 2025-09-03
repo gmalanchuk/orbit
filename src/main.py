@@ -3,20 +3,16 @@ import logging
 import sys
 
 from aiogram import Bot, Dispatcher
-from aiogram.filters import CommandStart
-from aiogram.types import Message
 
 from src.config import settings
-
-dp = Dispatcher()
-
-
-@dp.message(CommandStart())
-async def start_command(message: Message):
-    await message.answer(f"Hello!")
+from src.handlers.admin import admin_router
+from src.handlers.buyer import buyer_router
+from src.handlers.start import start_router
 
 
 async def main() -> None:
+    dp = Dispatcher()
+    dp.include_routers(start_router, buyer_router, admin_router)
     bot = Bot(token=settings.BOT_TOKEN)
     await dp.start_polling(bot)
 
