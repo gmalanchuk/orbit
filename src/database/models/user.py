@@ -2,7 +2,7 @@ from sqlalchemy import BigInteger
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.database.models.associations import offer_executors
-from src.database.models.base import TimeStampMixin, Base
+from src.database.models.base import Base, TimeStampMixin
 
 
 class User(Base, TimeStampMixin):

@@ -1,6 +1,7 @@
-from sqlalchemy import Table, ForeignKey, Column
+from sqlalchemy import Column, ForeignKey, Table
 
 from src.database.models.base import Base
+
 
 offer_executors = Table(
     "offer_executors",

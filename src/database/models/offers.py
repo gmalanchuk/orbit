@@ -1,22 +1,24 @@
 from enum import Enum
 
-from sqlalchemy import ForeignKey, DECIMAL, String, Column, Table
-from sqlalchemy.orm import mapped_column, Mapped, relationship
+from sqlalchemy import DECIMAL
 from sqlalchemy import Enum as SqlEnum
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.database.models.associations import offer_executors
-from src.database.models.base import TimeStampMixin, Base
-
-
-class OfferType(Enum):
-    NEWS = "новини"
-    VACANCIES = "вакансії"
+from src.database.models.base import Base, TimeStampMixin
 
 
 class OfferStatus(Enum):
     SUSPENDED = "на паузі"
     IN_PROGRESS = "в процесі"
     COMPLETED = "завершено"
+
+
+class OfferType(Enum):
+
+    NEWS = "новини"
+    VACANCIES = "вакансії"
 
 
 class Offer(Base, TimeStampMixin):

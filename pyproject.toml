@@ -3,7 +3,7 @@ name = "orbit"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Grigory Malanchuk",email = "grigorymalanchuk@gmail.com"}
+    { name = "Grigory Malanchuk", email = "grigorymalanchuk@gmail.com" }
 ]
 readme = "README.md"
 requires-python = ">=3.11,<4.0"
@@ -14,10 +14,24 @@ dependencies = [
     "asyncpg (>=0.30.0,<0.31.0)",
     "alembic (>=1.16.5,<2.0.0)",
     "watchfiles (>=1.1.0,<2.0.0)",
-    "alembic-autogenerate-enums (>=0.1.2,<0.2.0)"
+    "alembic-autogenerate-enums (>=0.1.2,<0.2.0)",
 ]
 
+[tool.poetry.group.dev.dependencies]
+pre-commit = "^4.3.0"
+isort = "^6.0.1"
+black = "^25.1.0"
+autoflake = "^2.3.1"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+line_length = 120
+skip = [".venv"]
+lines_after_imports = 2
+
+[tool.black]
+line-length = 120
+exclude = ".venv"

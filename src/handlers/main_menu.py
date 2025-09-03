@@ -1,8 +1,9 @@
-from aiogram import Router, F
+from aiogram import F, Router
 from aiogram.types import Message
 
 from src.constants import constants
 from src.handlers.start import start_command
+
 
 main_menu_router = Router()
 
