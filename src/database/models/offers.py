@@ -8,17 +8,15 @@ from src.database.models.associations import offer_executors
 from src.database.models.base import TimeStampMixin, Base
 
 
-class OfferType(Enum): # todo переименовать енамы
-    UNDEFINED = "не визначено"
+class OfferType(Enum):
     NEWS = "новини"
     VACANCIES = "вакансії"
 
 
-class OfferStatus(Enum): # todo переименовать енамы
+class OfferStatus(Enum):
+    SUSPENDED = "на паузі"
     IN_PROGRESS = "в процесі"
-    SUSPENDED = "призупинено"
     COMPLETED = "завершено"
-
 
 
 class Offer(Base, TimeStampMixin):
@@ -28,7 +26,7 @@ class Offer(Base, TimeStampMixin):
     name: Mapped[str] = mapped_column(String(64))
     description: Mapped[str] = mapped_column(String(256), nullable=True)
     telegram_channel_url: Mapped[str] = mapped_column(String(256), nullable=True)
-    type: Mapped[OfferType] = mapped_column(SqlEnum(OfferType), default=OfferType.UNDEFINED, nullable=False)
+    type: Mapped[OfferType] = mapped_column(SqlEnum(OfferType), nullable=True)
     status: Mapped[OfferStatus] = mapped_column(SqlEnum(OfferStatus), default=OfferStatus.SUSPENDED, nullable=False)
     price_per_subscriber: Mapped[DECIMAL] = mapped_column(DECIMAL(precision=4, scale=2), default=0.0, nullable=False)
     executors: Mapped[list["User"]] = relationship(secondary=offer_executors, back_populates="offers_as_executor")
