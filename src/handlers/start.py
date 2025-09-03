@@ -1,4 +1,4 @@
-from aiogram import Router, F
+from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
@@ -9,4 +9,7 @@ start_router = Router()
 
 @start_router.message(CommandStart())
 async def start_command(message: Message):
-    await message.answer(text="Hello!", reply_markup=start_keyboard)
+    await message.answer(
+        text="Hello!", # todo переписать приветственный текст
+        reply_markup=start_keyboard
+    )

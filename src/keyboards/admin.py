@@ -4,12 +4,15 @@ from src.constants import constants
 
 kb = [
     [
-        KeyboardButton(text=constants.ADMIN),
-        KeyboardButton(text=constants.BUYER)
+        KeyboardButton(text=constants.CREATE_OFFER),
+        KeyboardButton(text=constants.VIEW_OFFERS)
+    ],
+    [
+        KeyboardButton(text=constants.MAIN_MENU)
     ]
 ]
 
-start_keyboard = ReplyKeyboardMarkup(
+admin_keyboard = ReplyKeyboardMarkup(
     keyboard=kb,
     resize_keyboard=True,
     is_persistent=True,
