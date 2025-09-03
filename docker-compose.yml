@@ -1,0 +1,36 @@
+services:
+  orbit:
+    build: .
+    restart: always
+    volumes:
+      - ./:/orbit
+    command: >
+      sh -c "alembic upgrade head && watchfiles --target-type command 'python -m src.main'"
+    env_file:
+      - .env
+
+  postgres:
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - '${POSTGRES_PORT}:5432'
+    environment:
+      - POSTGRES_DB=${POSTGRES_NAME}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASS}
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - '8080:8080'
+    depends_on:
+      - postgres
+
+
+volumes:
+  postgres_data:
