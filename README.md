@@ -13,3 +13,4 @@ affiliate program for tiktok traffic
 
 poetry install --no-dev
 poetry install
+pre-commit install

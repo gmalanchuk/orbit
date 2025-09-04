@@ -1,4 +1,4 @@
-class Constants:
+class Constants:  # todo отсортировать
     ADMIN = "Адмін"
     BUYER = "Трафер"
     MAIN_MENU = "Головне меню"
