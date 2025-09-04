@@ -9,8 +9,4 @@ affiliate program for tiktok traffic
 - ИЛИ поле для количества подписокников, которых пользователь планирует привлечь
 
 
-
-
-poetry install --no-dev
-poetry install
 pre-commit install
