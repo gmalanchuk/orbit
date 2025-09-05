@@ -19,6 +19,13 @@ class CreateProfileStates(StatesGroup):
     # offer_status = State()
     price_per_subscriber = State()
 
+    # user_data = {
+    #     "name": 'test',
+    #     "telegram_channel_url": 'test',
+    #     "price_per_subscriber": 1.5,
+    #     "type": OfferType.VACANCIES,
+    # }
+
 
 @create_offer_router.message(F.text.lower() == constants.CREATE_OFFER.lower())
 async def create_offer_command(message: Message, state: FSMContext):
@@ -28,6 +35,7 @@ async def create_offer_command(message: Message, state: FSMContext):
 
 @create_offer_router.message(CreateProfileStates.name)
 async def state_name(message: Message, state: FSMContext):
+    # todo валидатор не больше 64 символов
     await state.update_data(name=message.text)
     await message.answer(text="Введіть посилання на телеграм канал:")
     await state.set_state(CreateProfileStates.telegram_channel_url)
@@ -35,6 +43,7 @@ async def state_name(message: Message, state: FSMContext):
 
 @create_offer_router.message(CreateProfileStates.telegram_channel_url)
 async def state_telegram_channel_url(message: Message, state: FSMContext):
+    # todo валидатор что это вообще ссылка
     await state.update_data(telegram_channel_url=message.text)
     await message.answer(text="Виберіть тип вашого оферу:", reply_markup=offer_type_keyboard)  # todo переписать текст
     await state.set_state(CreateProfileStates.offer_type)
@@ -49,6 +58,7 @@ async def state_offer_type(message: Message, state: FSMContext):
 
 @create_offer_router.message(CreateProfileStates.price_per_subscriber)
 async def state_price_per_subscriber(message: Message, state: FSMContext):
+    # todo валидатор на число и что число должно быть в рамках precision=4, scale=2
     await state.update_data(price_per_subscriber=message.text)
 
     offer_service = OfferService()
@@ -56,6 +66,6 @@ async def state_price_per_subscriber(message: Message, state: FSMContext):
     await offer_service.create_offer(telegram_user_id=message.from_user.id, data=user_data)
 
     await message.answer(
-        text="Ваш офер було створено, зайди в налаштування, щоб його запустити"
+        text="Ваш офер було створено, зайдіть в налаштування, щоб його запустити"
     )  # todo переписать текст
     await state.clear()
