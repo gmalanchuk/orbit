@@ -11,8 +11,3 @@ admin_router = Router()
 @admin_router.message(F.text.lower() == constants.ADMIN.lower())
 async def admin_command(message: Message):
     await message.answer(text="Hello Admin!", reply_markup=admin_keyboard)  # todo переписать текст
-
-
-@admin_router.message(F.text.lower() == constants.CREATE_OFFER.lower())
-async def create_offer_command(message: Message):
-    await message.answer(text="Create Offer")
