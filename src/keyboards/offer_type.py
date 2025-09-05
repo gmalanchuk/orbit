@@ -14,6 +14,8 @@ def build_keyboard(enum_cls):
         row.append(KeyboardButton(text=value.value))
     keyboard.append(row)
 
+    # todo проверить чтобы эта функция не срабатывала каждый раз, когда пользователь выбрал тип не из списка, а вписал какую-то хуйню вручную
+
     return keyboard
 
 

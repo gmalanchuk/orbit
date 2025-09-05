@@ -9,5 +9,9 @@ kb = [
 ]
 
 admin_keyboard = ReplyKeyboardMarkup(
-    keyboard=kb, resize_keyboard=True, is_persistent=True, input_field_placeholder=constants.INPUT_FIELD_PLACEHOLDER
+    keyboard=kb,
+    resize_keyboard=True,
+    input_field_placeholder=constants.INPUT_FIELD_PLACEHOLDER,
+    is_persistent=True,
+    one_time_keyboard=True,
 )
