@@ -6,12 +6,8 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
 
 from src.constants import constants
-from src.handlers.validators.create_offer import (
-    name_validator,
-    offer_type_validator,
-    price_per_subscriber_validator,
-    telegram_channel_url_validator,
-)
+from src.handlers.validators.create_offer import (name_validator, offer_type_validator, price_per_subscriber_validator,
+                                                  telegram_channel_url_validator)
 from src.keyboards.main_menu import main_menu_keyboard
 from src.keyboards.offer_type import offer_type_keyboard
 from src.services.offer import OfferService
@@ -75,9 +71,7 @@ async def state_offer_type(message: Message, state: FSMContext):
         return
 
     await state.update_data(offer_type=message.text)
-    await message.answer(
-        text="Введіть плату за одного підписника:", reply_markup=main_menu_keyboard
-    )  # todo переписать текст
+    await message.answer(text="Введіть плату за одного підписника:", reply_markup=main_menu_keyboard)  # todo переписать текст
     await state.set_state(CreateProfileStates.price_per_subscriber)
 
 
@@ -92,7 +86,5 @@ async def state_price_per_subscriber(message: Message, state: FSMContext):
     user_data = await state.get_data()
     await OfferService().create_offer(telegram_user_id=message.from_user.id, data=user_data)
 
-    await message.answer(
-        text="Ваш офер було створено, зайдіть в налаштування, щоб його запустити"
-    )  # todo переписать текст
+    await message.answer(text="Ваш офер було створено, зайдіть в налаштування, щоб його запустити")  # todo переписать текст
     await state.clear()
