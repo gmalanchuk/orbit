@@ -1,4 +1,4 @@
-from decimal import Decimal, InvalidOperation
+from decimal import Decimal
 
 from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
@@ -6,7 +6,12 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
 
 from src.constants import constants
-from src.database.models.offer import OfferType
+from src.handlers.validators.create_offer import (
+    name_validator,
+    offer_type_validator,
+    price_per_subscriber_validator,
+    telegram_channel_url_validator,
+)
 from src.keyboards.main_menu import main_menu_keyboard
 from src.keyboards.offer_type import offer_type_keyboard
 from src.services.offer import OfferService
@@ -39,10 +44,9 @@ async def create_offer_command(message: Message, state: FSMContext):
 
 @create_offer_router.message(CreateProfileStates.name)
 async def state_name(message: Message, state: FSMContext):
-
-    # todo перенести куда-то валидатор
-    if len(message.text) > 64:
-        return await message.answer(text="Назва оферу не може бути довшою за 64 символи. Введіть назву оферу:")
+    validator = await name_validator(message)
+    if validator:
+        return
 
     print()
     print(message.text)  # todo проверить че происходит когда нажимаешь кнопку головне меню
@@ -55,10 +59,9 @@ async def state_name(message: Message, state: FSMContext):
 
 @create_offer_router.message(CreateProfileStates.telegram_channel_url)
 async def state_telegram_channel_url(message: Message, state: FSMContext):
-
-    # todo перенести куда-то валидатор
-    if "t.me/" not in message.text:
-        return await message.answer(text="Невірне посилання")  # todo переписать текст ошибки
+    validator = await telegram_channel_url_validator(message)
+    if validator:
+        return
 
     await state.update_data(telegram_channel_url=message.text)
     await message.answer(text="Виберіть тип вашого оферу:", reply_markup=offer_type_keyboard)  # todo переписать текст
@@ -67,13 +70,9 @@ async def state_telegram_channel_url(message: Message, state: FSMContext):
 
 @create_offer_router.message(CreateProfileStates.offer_type)
 async def state_offer_type(message: Message, state: FSMContext):
-
-    # todo перенести куда-то валидатор
-    types = [e.value for e in OfferType]
-    if message.text not in types:
-        return await message.answer(
-            text="Будь-ласка вибіреть тип оферу з нижче запропонованих:", reply_markup=offer_type_keyboard
-        )  # todo переписать текст ошибки
+    validator = await offer_type_validator(message)
+    if validator:
+        return
 
     await state.update_data(offer_type=message.text)
     await message.answer(
@@ -84,26 +83,14 @@ async def state_offer_type(message: Message, state: FSMContext):
 
 @create_offer_router.message(CreateProfileStates.price_per_subscriber)
 async def state_price_per_subscriber(message: Message, state: FSMContext):
-
-    # todo перенести куда-то валидатор
-    try:
-        num = Decimal(message.text)
-        if num < 0 or num > 9999:
-            return await message.answer(
-                text="Плата за одного підписника має бути більшою за 0 та меншою за 9999. Введіть плату за одного підписника:"
-            )  # todo переписать текст
-        elif num.as_tuple().exponent < -2:
-            return await message.answer(
-                text="Плата за одного підписника має мати не більше двох знаків після коми. Введіть плату за одного підписника:"
-            )  # todo переписать текст
-    except InvalidOperation:
-        return await message.answer(text="Будь-ласка введіть коректне число:")  # todo переписать текст
+    num = await price_per_subscriber_validator(message)
+    if type(num) is not Decimal:
+        return
 
     await state.update_data(price_per_subscriber=num)
 
-    offer_service = OfferService()
     user_data = await state.get_data()
-    await offer_service.create_offer(telegram_user_id=message.from_user.id, data=user_data)
+    await OfferService().create_offer(telegram_user_id=message.from_user.id, data=user_data)
 
     await message.answer(
         text="Ваш офер було створено, зайдіть в налаштування, щоб його запустити"
