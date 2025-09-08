@@ -1,4 +1,5 @@
 from aiogram import F, Router
+from aiogram.fsm.context import FSMContext
 from aiogram.types import Message
 
 from src.constants import constants
@@ -9,6 +10,6 @@ main_menu_router = Router()
 
 
 @main_menu_router.message(F.text.lower() == constants.MAIN_MENU.lower())
-async def main_menu_command(message: Message):
+async def main_menu_command(message: Message, state: FSMContext):
     # todo здесь по идее нужно скинуть состояние
-    return await start_command(message)
+    return await start_command(message, state)

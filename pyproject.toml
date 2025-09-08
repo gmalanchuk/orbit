@@ -30,6 +30,7 @@ build-backend = "poetry.core.masonry.api"
 line_length = 120
 skip = [".venv"]
 lines_after_imports = 2
+profile = "black"
 
 [tool.black]
 line-length = 120
