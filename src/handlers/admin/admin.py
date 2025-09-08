@@ -2,7 +2,7 @@ from aiogram import F, Router
 from aiogram.types import Message
 
 from src.constants import constants
-from src.keyboards.admin import admin_keyboard
+from src.keyboards.admin.admin import admin_keyboard
 
 
 admin_router = Router()
