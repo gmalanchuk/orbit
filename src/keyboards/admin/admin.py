@@ -15,3 +15,5 @@ admin_keyboard = ReplyKeyboardMarkup(
     is_persistent=True,
     one_time_keyboard=True,
 )
+
+# todo чтобы это клава пропадала сразу после начала создания оффера

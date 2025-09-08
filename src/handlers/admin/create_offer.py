@@ -6,8 +6,8 @@ from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
 
 from src.constants import constants
+from src.keyboards.admin.admin import admin_keyboard
 from src.keyboards.admin.offer_type import offer_type_keyboard
-from src.keyboards.main_menu import main_menu_keyboard
 from src.services.offer import OfferService
 from src.validators import (
     name_validator,
@@ -29,7 +29,7 @@ class CreateProfileStates(StatesGroup):
 
 @create_offer_router.message(F.text.lower() == constants.CREATE_OFFER.lower())
 async def create_offer_command(message: Message, state: FSMContext):
-    await message.answer(text="Придумай назву своєму оферу:", reply_markup=main_menu_keyboard)
+    await message.answer(text="Придумай назву своєму оферу:")  # todo здесь написать про команду /cancel
     await state.set_state(CreateProfileStates.name)
 
 
@@ -39,12 +39,8 @@ async def state_name(message: Message, state: FSMContext):
     if validator:
         return
 
-    print()
-    print(message.text)  # todo проверить че происходит когда нажимаешь кнопку головне меню
-    print()
-
     await state.update_data(name=message.text)
-    await message.answer(text="Введи посилання на телеграм канал:", reply_markup=main_menu_keyboard)
+    await message.answer(text="Введи посилання на телеграм канал:")
     await state.set_state(CreateProfileStates.telegram_channel_url)
 
 
@@ -66,7 +62,7 @@ async def state_offer_type(message: Message, state: FSMContext):
         return
 
     await state.update_data(offer_type=message.text)
-    await message.answer(text="Введи плату, яку отримає трафер за одного підписника:", reply_markup=main_menu_keyboard)
+    await message.answer(text="Введи плату, яку отримає трафер за одного підписника:")
     await state.set_state(CreateProfileStates.price_per_subscriber)
 
 
@@ -82,6 +78,7 @@ async def state_price_per_subscriber(message: Message, state: FSMContext):
     await OfferService().create_offer(telegram_user_id=message.from_user.id, data=user_data)
 
     await message.answer(
-        text="🎉Офер було успішно створено! Зміни статус офера в налаштуваннях, щоб запустити його."
+        text="🎉Офер було успішно створено! Зміни статус офера в налаштуваннях, щоб запустити його.",
+        reply_markup=admin_keyboard,  # todo со свежей головой проверить правильно ли здесь использовать эту клавиатуру
     )  # todo здесь в тексте вставить ссылку на настройки офера
     await state.clear()
