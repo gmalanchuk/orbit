@@ -10,6 +10,3 @@ affiliate program for tiktok traffic
 
 
 pre-commit install
-
-
-сделать мидлвару для команды /cancel (потому что эта команда сейчас не срабатывает в валидаторах)

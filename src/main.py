@@ -15,7 +15,7 @@ from src.handlers.start import start_router
 
 async def main() -> None:
     dp = Dispatcher()
-    dp.include_routers(start_router, buyer_router, admin_router, main_menu_router, create_offer_router, cancel_router)
+    dp.include_routers(start_router, cancel_router, main_menu_router, buyer_router, admin_router, create_offer_router)
     bot = Bot(token=settings.BOT_TOKEN)
     await dp.start_polling(bot)
 
