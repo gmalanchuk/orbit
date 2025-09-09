@@ -7,6 +7,7 @@ from src.keyboards.admin.offer_type import offer_type_keyboard
 async def name_validator(message):
     # todo проверить, что будет если задать оферу название - смайлик, а не текст
     # todo спец символы или че
+
     if len(message.text) > 64:
         return await message.answer(
             text="❗На жаль, наша система не дозволяє давати оферам такі довгі назви. Максимальна кількість символів - 64"
@@ -33,9 +34,9 @@ async def offer_type_validator(message):
 
 
 async def price_per_subscriber_validator(message):
-
     # todo message.text.isdigit
     # todo если в плате за одного подписчика указывать число через запятую, то нихуя не работает
+
     try:
         num = Decimal(message.text)
         if num < 0 or num > 9999:

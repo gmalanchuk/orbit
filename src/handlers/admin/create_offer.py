@@ -4,6 +4,7 @@ from aiogram import F, Router
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.types import Message
+from aiogram.utils.formatting import Spoiler, Text
 
 from src.constants import constants
 from src.keyboards.admin.admin import admin_keyboard
@@ -29,7 +30,9 @@ class CreateProfileStates(StatesGroup):
 
 @create_offer_router.message(F.text.lower() == constants.CREATE_OFFER.lower())
 async def create_offer_command(message: Message, state: FSMContext):
-    await message.answer(text="Придумай назву своєму оферу:")  # todo здесь написать про команду /cancel
+    text = Text("💡Щоб скасувати створення оферу, використовуй ", Spoiler("/cancel\n"))
+    await message.answer(**text.as_kwargs())
+    await message.answer(text="Введи назву для оферу:")
     await state.set_state(CreateProfileStates.name)
 
 
@@ -78,7 +81,7 @@ async def state_price_per_subscriber(message: Message, state: FSMContext):
     await OfferService().create_offer(telegram_user_id=message.from_user.id, data=user_data)
 
     await message.answer(
-        text="🎉Офер було успішно створено! Зміни статус офера в налаштуваннях, щоб запустити його.",
-        reply_markup=admin_keyboard,  # todo со свежей головой проверить правильно ли здесь использовать эту клавиатуру
+        text="🎉Офер було успішно створено, але він поки на паузі. Зміни його статус у налаштуваннях, щоб запустити.",
+        reply_markup=admin_keyboard,
     )  # todo здесь в тексте вставить ссылку на настройки офера
     await state.clear()
