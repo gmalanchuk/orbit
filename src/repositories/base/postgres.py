@@ -8,9 +8,12 @@ from src.repositories.base.abstract import AbstractRepository
 class PostgresRepository(AbstractRepository):
     model = type[Base]
 
-    async def get_all(self):
+    async def get_all(self, filters: dict = None):
         async with async_session() as session:
             query = select(self.model).order_by(self.model.id)
+            if filters:
+                conditions = [getattr(self.model, field) == value for field, value in filters.items()]
+                query = query.where(*conditions)
             result = await session.execute(query)
             return result.scalars().all()
 

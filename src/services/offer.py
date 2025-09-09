@@ -13,3 +13,7 @@ class OfferService:
         data["creator_id"] = creator_id
         data["offer_type"] = OfferType(data["offer_type"]).name
         await self.offer_repository.add_one(data=data)
+
+    async def get_all_offers(self, telegram_user_id):
+        creator_id = (await self.user_repository.get_one(telegram_user_id=telegram_user_id)).id
+        return await self.offer_repository.get_all(filters={"creator_id": creator_id})

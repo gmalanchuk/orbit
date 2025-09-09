@@ -5,8 +5,7 @@ from src.keyboards.admin.offer_type import offer_type_keyboard
 
 
 async def name_validator(message):
-    # todo проверить, что будет если задать оферу название - смайлик, а не текст
-    # todo спец символы или че
+    # todo проверить, что будет если задать оферу название - смайлик, а не текст (спец символы или че)
 
     if len(message.text) > 64:
         return await message.answer(
